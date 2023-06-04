@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
           content: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadiusDirectional.circular(20)),
-            height: 245,
+            height: 270,
             child: Column(
               children: [
                 TextFormField(
@@ -98,9 +98,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   textCapitalization: TextCapitalization.sentences,
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                Spacer(),
                 TextField(
                   controller: dateinput,
                   decoration: InputDecoration(
@@ -135,9 +133,7 @@ class _HomePageState extends State<HomePage> {
                     }
                   },
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                Spacer(),
                 ColorChangingButton(
                   onButtonSelected: _updateSelectedButtonIndex,
                 ),

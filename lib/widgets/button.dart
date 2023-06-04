@@ -12,7 +12,7 @@ class ColorChangingButton extends StatefulWidget {
 }
 
 class _ColorChangingButtonState extends State<ColorChangingButton> {
-  int _selectedButtonIndex = -1;
+  int _selectedButtonIndex = 0;
   final List<String> _text = ['Personal', 'Work', 'Finance', 'Other'];
 
   void _selectButton(int index) {

@@ -17,7 +17,7 @@ class tiles extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black), // Add black border
+        border: Border.all(color: Colors.black),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Container(
