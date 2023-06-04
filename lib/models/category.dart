@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum Categories {
-  personal,
-  home,
-  work,
-  outside,
-  other
-}
+enum Categories { Personal, Finance, Work, Other }
 
 class Category {
   const Category(this.title, this.color);

@@ -2,24 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:to_do_gdsc/models/category.dart';
 
 const categories = {
-  Categories.personal: Category(
+  Categories.Personal: Category(
     'Personal',
-    Color(0xFFf3dfa2),
+    Color(0xFFEDBBB4),
   ),
-  Categories.work: Category(
+  Categories.Work: Category(
     'Work',
-    Color(0xFFbb4430),
+    Color(0xFFFFF6E7),
   ),
-  Categories.home: Category(
-    'Home',
-    Color(0xFF7ebdc2),
+  Categories.Finance: Category(
+    'Finance',
+    Color(0xFFF3E4F6),
   ),
-  Categories.outside: Category(
-    'Outside',
-    Color(0xFFefe6dd),
-  ),
-  Categories.other: Category(
+  Categories.Other: Category(
     'Other',
-    Color(0xFFef8354),
+    Color(0xFFefe6dd),
   ),
 };

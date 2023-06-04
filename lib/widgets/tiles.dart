@@ -3,13 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:to_do_gdsc/models/category.dart';
 
 class tiles extends StatelessWidget {
-  tiles({
-    super.key,
-    required this.title,
-    required this.category,
-    required this.date,
-    required this.onRemove
-  });
+  tiles(
+      {super.key,
+      required this.title,
+      required this.category,
+      required this.date,
+      required this.onRemove});
   String title;
   Category category;
   DateTime date;
@@ -31,11 +30,11 @@ class tiles extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                  fontSize: 25,
+                  fontSize: 20,
                   color: Colors.black,
                   fontWeight: FontWeight.w400),
             ),
-            SizedBox(height: 12), // Add spacing between title and subtitle
+            SizedBox(height: 15),
             Row(
               children: [
                 SizedBox(
@@ -71,7 +70,7 @@ class tiles extends StatelessWidget {
               height: 6,
             ),
             IconButton(
-                onPressed:onRemove,
+                onPressed: onRemove,
                 icon: Icon(
                   Icons.check_box_outline_blank,
                   size: 40,
