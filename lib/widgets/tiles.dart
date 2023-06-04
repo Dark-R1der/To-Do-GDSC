@@ -29,41 +29,41 @@ class tiles extends StatelessWidget {
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 20,
                     color: Colors.black,
                     fontWeight: FontWeight.w400),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   SizedBox(
                     height: 30,
                     child: ElevatedButton(
                       onPressed: () {},
-                      child: Text(category.title),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
+                      child: Text(category.title),
                     ),
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   const Icon(
                     Icons.calendar_month_outlined,
                     size: 20,
                   ),
-                  SizedBox(width: 4),
+                  const SizedBox(width: 4),
                   Text(
                     DateFormat('yyyy-MM-dd').format(date),
-                    style: TextStyle(color: Colors.black),
+                    style: const TextStyle(color: Colors.black),
                   ),
                 ],
               ),
@@ -71,12 +71,12 @@ class tiles extends StatelessWidget {
           ),
           trailing: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 6,
               ),
               IconButton(
                   onPressed: onRemove,
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.check_box_outline_blank,
                     size: 40,
                   ))

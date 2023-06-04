@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class PinWidget extends StatefulWidget {
   final Function(bool) updatePin;
@@ -15,7 +13,7 @@ class _PinWidgetState extends State<PinWidget> {
   void _togglePin() {
     setState(() {
       isPinned = !isPinned;
-      widget.updatePin(isPinned); 
+      widget.updatePin(isPinned);
     });
   }
 

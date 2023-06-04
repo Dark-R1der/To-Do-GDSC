@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:to_do_gdsc/data/categories.dart';
 import 'package:to_do_gdsc/models/category.dart';
 import 'package:to_do_gdsc/models/todolist.dart';
+import 'package:to_do_gdsc/service/services.dart';
 import 'package:to_do_gdsc/widgets/button.dart';
 import 'package:to_do_gdsc/widgets/pin.dart';
 import 'package:to_do_gdsc/widgets/tiles.dart';
@@ -20,10 +21,34 @@ class _HomePageState extends State<HomePage> {
   List<ToDoItem> toDoList = [];
   List<ToDoItem> toDoListPinned = [];
 
-  void _removeItem(int index) {
+  final Services _s = Services();
+
+  Future<void> _removeItem(String documentId) async {
+    _s.deleteTodoItem(documentId);
+    await readTasks();
+  }
+
+  Future<void> readTasks() async {
+    List<ToDoItem> temp = await _s.read() as List<ToDoItem>;
+    List<ToDoItem> dupTasks = [];
+    List<ToDoItem> dupPinedTasks = [];
+    for (var element in temp) {
+      if (element.ispined) {
+        dupPinedTasks.add(element);
+      }
+      dupTasks.add(element);
+    }
     setState(() {
-      toDoList.removeAt(index);
+      toDoList = dupTasks;
+      toDoListPinned = dupPinedTasks;
     });
+  }
+
+  @override
+  void initState() {
+    readTasks();
+
+    super.initState();
   }
 
   void _removeItemPinned(int index) {
@@ -46,7 +71,6 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _selectedButtonIndex = index;
       });
-      print(_selectedButtonIndex);
     }
 
     return showDialog(
@@ -61,13 +85,13 @@ class _HomePageState extends State<HomePage> {
               Text(
                 'Task',
                 style: GoogleFonts.poppins(
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                     fontSize: 20,
                     color: Colors.black,
                   ),
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               PinWidget(
                 updatePin: updatePin,
               ),
@@ -83,7 +107,7 @@ class _HomePageState extends State<HomePage> {
                   decoration: InputDecoration(
                     hintText: 'Title',
                     filled: true,
-                    fillColor: Color(0xFFD9D9D9),
+                    fillColor: const Color(0xFFD9D9D9),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,
@@ -98,12 +122,12 @@ class _HomePageState extends State<HomePage> {
                   },
                   textCapitalization: TextCapitalization.sentences,
                 ),
-                Spacer(),
+                const Spacer(),
                 TextField(
                   controller: dateinput,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Color(0xFFD9D9D9),
+                    fillColor: const Color(0xFFD9D9D9),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,
@@ -112,7 +136,7 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide: BorderSide.none,
                     ),
-                    icon: Icon(Icons.calendar_today),
+                    icon: const Icon(Icons.calendar_today),
                     hintText: "Enter Date",
                   ),
                   readOnly: true,
@@ -133,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                     }
                   },
                 ),
-                Spacer(),
+                const Spacer(),
                 ColorChangingButton(
                   onButtonSelected: _updateSelectedButtonIndex,
                 ),
@@ -145,7 +169,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -153,8 +177,12 @@ class _HomePageState extends State<HomePage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   )),
-              onPressed: () {
-                Navigator.of(context).pop();
+              onPressed: () async {
+                bool isPined = false;
+                if (pin) {
+                  isPined = true;
+                }
+
                 setState(() {
                   if (_selectedButtonIndex == 0) {
                     _selectedCategory = categories[Categories.Personal]!;
@@ -168,19 +196,20 @@ class _HomePageState extends State<HomePage> {
                   if (_selectedButtonIndex == 3) {
                     _selectedCategory = categories[Categories.Other]!;
                   }
-                  // print(_selectedButtonIndex);
-                  ToDoItem newItem = ToDoItem(
+
+                  //toDoList.add(newItem);
+                });
+                ToDoItem newItem = ToDoItem(
                     title: textTitle,
                     category: _selectedCategory,
                     dateTime: DateTime.parse(dateinput.text),
-                  );
-                  if (pin) {
-                    toDoListPinned.add(newItem);
-                  }
-                  toDoList.add(newItem);
-                });
+                    id: textTitle + DateTime.parse(dateinput.text).toString(),
+                    ispined: isPined);
+                _s.addTask(newItem);
+                readTasks();
+                Navigator.of(context).pop();
               },
-              child: Text('Submit'),
+              child: const Text('Submit'),
             ),
           ],
         );
@@ -204,7 +233,7 @@ class _HomePageState extends State<HomePage> {
           Text(
             'Create your first to-do list...',
             style: GoogleFonts.poppins(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontSize: 20,
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -231,7 +260,7 @@ class _HomePageState extends State<HomePage> {
             label: Text(
               'New List',
               style: GoogleFonts.poppins(
-                textStyle: TextStyle(
+                textStyle: const TextStyle(
                   color: Colors.white,
                 ),
               ),
@@ -248,7 +277,7 @@ class _HomePageState extends State<HomePage> {
       length: 2,
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(120.0),
+          preferredSize: const Size.fromHeight(120.0),
           child: AppBar(
             leading: SizedBox(
               height: 20,
@@ -260,7 +289,7 @@ class _HomePageState extends State<HomePage> {
             title: Text(
               'DooIt',
               style: GoogleFonts.poppins(
-                textStyle: TextStyle(
+                textStyle: const TextStyle(
                   fontSize: 25,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -270,7 +299,7 @@ class _HomePageState extends State<HomePage> {
             elevation: 0,
             backgroundColor: Colors.white,
             bottom: TabBar(
-              indicatorPadding: EdgeInsets.symmetric(horizontal: 16.0),
+              indicatorPadding: const EdgeInsets.symmetric(horizontal: 16.0),
               unselectedLabelColor: Colors.grey,
               indicatorSize: TabBarIndicatorSize.tab,
               indicator: BoxDecoration(
@@ -284,7 +313,7 @@ class _HomePageState extends State<HomePage> {
                     child: Text(
                       "All List",
                       style: GoogleFonts.poppins(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -297,7 +326,7 @@ class _HomePageState extends State<HomePage> {
                     child: Text(
                       "Pinned",
                       style: GoogleFonts.poppins(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -319,9 +348,9 @@ class _HomePageState extends State<HomePage> {
                         title: toDoList[index].title,
                         category: toDoList[index].category,
                         date: toDoList[index].dateTime,
-                        onRemove: () => _removeItem(index),
+                        onRemove: () => _removeItem(toDoList[index].id),
                       ),
-                      separatorBuilder: ((context, index) => SizedBox(
+                      separatorBuilder: ((context, index) => const SizedBox(
                             height: 20,
                           )),
                       itemCount: toDoList.length,
@@ -338,7 +367,7 @@ class _HomePageState extends State<HomePage> {
                         date: toDoListPinned[index].dateTime,
                         onRemove: () => _removeItemPinned(index),
                       ),
-                      separatorBuilder: ((context, index) => SizedBox(
+                      separatorBuilder: ((context, index) => const SizedBox(
                             height: 20,
                           )),
                       itemCount: toDoListPinned.length,
@@ -352,7 +381,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   showDia();
                 },
-                child: Icon(Icons.add),
+                child: const Icon(Icons.add),
               ),
       ),
     );

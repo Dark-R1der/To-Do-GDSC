@@ -1,8 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_gdsc/screens/homePage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -36,7 +39,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }

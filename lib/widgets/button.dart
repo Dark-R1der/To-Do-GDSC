@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // ColorChangingButton class with a callback function
 class ColorChangingButton extends StatefulWidget {
   final Function(int) onButtonSelected;
 
-  const ColorChangingButton({required this.onButtonSelected});
+  const ColorChangingButton({super.key, required this.onButtonSelected});
 
   @override
   _ColorChangingButtonState createState() => _ColorChangingButtonState();
@@ -28,11 +27,11 @@ class _ColorChangingButtonState extends State<ColorChangingButton> {
       children: [
         Row(
           children: [
-            SizedBox(
+            const SizedBox(
               width: 14.5,
             ),
             _buildButton(0),
-            SizedBox(
+            const SizedBox(
               width: 29,
             ),
             _buildButton(1),
@@ -40,11 +39,11 @@ class _ColorChangingButtonState extends State<ColorChangingButton> {
         ),
         Row(
           children: [
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             _buildButton(2),
-            SizedBox(
+            const SizedBox(
               width: 30,
             ),
             _buildButton(3),
