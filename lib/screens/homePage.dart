@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
@@ -5,6 +7,8 @@ import 'package:to_do_gdsc/data/categories.dart';
 import 'package:to_do_gdsc/models/category.dart';
 import 'package:to_do_gdsc/models/todolist.dart';
 import 'package:to_do_gdsc/widgets/tiles.dart';
+
+import '../services/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,10 +19,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<ToDoItem> toDoList = [];
-  void _removeItem(int index) {
+  Services _s = Services();
+  void _removeItem(String documentId) {
+    _s.deleteTodoItem(documentId);
+    readTasks();
+  }
+
+  Future<void> readTasks() async {
+    List<ToDoItem> temp = await _s.read() as List<ToDoItem>;
     setState(() {
-      toDoList.removeAt(index);
+      toDoList = temp;
     });
+  }
+
+  @override
+  void initState() {
+    readTasks();
+    super.initState();
   }
 
   void _showBottomSheet(BuildContext context) {
@@ -106,15 +123,18 @@ class _HomePageState extends State<HomePage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         )),
-                    onPressed: () {
+                    onPressed: () async {
+                      ToDoItem newItem = ToDoItem(
+                          title: textTitle,
+                          category: _selectedCategory,
+                          dateTime: DateTime.parse(dateinput.text),
+                          id: textTitle +
+                              DateTime.parse(dateinput.text).toString());
+
+                      _s.addTask(newItem);
+
+                      await readTasks();
                       Navigator.of(context).pop();
-                      setState(() {
-                        ToDoItem newItem = ToDoItem(
-                            title: textTitle,
-                            category: _selectedCategory,
-                            dateTime: DateTime.parse(dateinput.text));
-                        toDoList.add(newItem);
-                      });
                     },
                     child: const Text(
                       'Submit',
@@ -173,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                   title: toDoList[index].title,
                   category: toDoList[index].category,
                   date: toDoList[index].dateTime,
-                  onRemove: () => _removeItem(index),
+                  onRemove: () => _removeItem(toDoList[index].id),
                 ),
                 separatorBuilder: ((context, index) => SizedBox(
                       height: 20,

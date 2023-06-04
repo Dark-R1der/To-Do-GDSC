@@ -5,8 +5,10 @@ class ToDoItem {
     required this.title,
     required this.category,
     required this.dateTime,
+    required this.id,
   });
-  final String title;
+  final String id;
+  late final String title;
   final Category category;
   final DateTime dateTime;
 }

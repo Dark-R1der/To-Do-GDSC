@@ -1,7 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_gdsc/screens/welcomePage.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  //InitialBindings().dependencies();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
