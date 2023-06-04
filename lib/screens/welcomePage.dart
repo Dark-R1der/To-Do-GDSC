@@ -27,9 +27,9 @@ class WelcomePage extends StatelessWidget {
           const SizedBox(
             height: 15,
           ),
-          Container(
+          const SizedBox(
             width: 200,
-            child: const Text(
+            child: Text(
               'Write What You Need To Do. EveryDay',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -49,7 +49,7 @@ class WelcomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomePage(),
+                    builder: (context) => const HomePage(),
                   ),
                 );
               },

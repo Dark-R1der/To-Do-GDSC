@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:to_do_gdsc/data/categories.dart';
 import 'package:to_do_gdsc/models/category.dart';
 import 'package:to_do_gdsc/models/todolist.dart';
@@ -22,8 +21,7 @@ class Services {
     List<ToDoItem> tasks = [];
     final snapshot = await FirebaseFirestore.instance.collection("tasks").get();
     final List<DocumentSnapshot> documents = snapshot.docs;
-    documents.forEach((element) {
-      Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+    for (var element in documents) {
       dynamic category = element["category"];
       if (category == "Home") {
         category = Categories.home;
@@ -42,7 +40,7 @@ class Services {
           category: categories[category]!,
           dateTime: element["date"].toDate(),
           id: element["name"] + element["date"].toDate().toString()));
-    });
+    }
     return tasks;
   }
 

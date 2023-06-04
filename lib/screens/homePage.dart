@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<ToDoItem> toDoList = [];
-  Services _s = Services();
+  final Services _s = Services();
   void _removeItem(String documentId) {
     _s.deleteTodoItem(documentId);
     readTasks();
@@ -41,9 +39,9 @@ class _HomePageState extends State<HomePage> {
   void _showBottomSheet(BuildContext context) {
     String textTitle = '';
     TextEditingController dateinput = TextEditingController();
-    var _selectedCategory = categories[Categories.home]!;
+    var selectedCategory = categories[Categories.home]!;
     showModalBottomSheet(
-      backgroundColor: Color(0xFFefe6dd),
+      backgroundColor: const Color(0xFFefe6dd),
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
@@ -54,12 +52,12 @@ class _HomePageState extends State<HomePage> {
           ),
           child: SingleChildScrollView(
             child: Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextFormField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Title',
                     ),
                     onChanged: (value) {
@@ -68,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                     textCapitalization: TextCapitalization.sentences,
                   ),
                   DropdownButtonFormField(
-                    value: _selectedCategory,
+                    value: selectedCategory,
                     items: [
                       for (final category in categories.entries)
                         DropdownMenuItem(
@@ -80,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                                 height: 16,
                                 color: category.value.color,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 6,
                               ),
                               Text(category.value.title),
@@ -90,13 +88,13 @@ class _HomePageState extends State<HomePage> {
                     ],
                     onChanged: (value) {
                       setState(() {
-                        _selectedCategory = value!;
+                        selectedCategory = value!;
                       });
                     },
                   ),
                   TextField(
                     controller: dateinput,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         icon: Icon(Icons.calendar_today),
                         labelText: "Enter Date"),
                     readOnly: true,
@@ -116,17 +114,17 @@ class _HomePageState extends State<HomePage> {
                       }
                     },
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFef8354),
+                        backgroundColor: const Color(0xFFef8354),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         )),
                     onPressed: () async {
                       ToDoItem newItem = ToDoItem(
                           title: textTitle,
-                          category: _selectedCategory,
+                          category: selectedCategory,
                           dateTime: DateTime.parse(dateinput.text),
                           id: textTitle +
                               DateTime.parse(dateinput.text).toString());
@@ -174,10 +172,10 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset('assets/emptyimg.png'),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text(
+                const Text(
                   'Create your first to-do list...',
                   style: TextStyle(
                       color: Colors.white,
@@ -195,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                   date: toDoList[index].dateTime,
                   onRemove: () => _removeItem(toDoList[index].id),
                 ),
-                separatorBuilder: ((context, index) => SizedBox(
+                separatorBuilder: ((context, index) => const SizedBox(
                       height: 20,
                     )),
                 itemCount: toDoList.length,
@@ -205,11 +203,11 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           _showBottomSheet(context); // Call the _showBottomSheet function
         },
-        child: Icon(
+        backgroundColor: Colors.white,
+        child: const Icon(
           Icons.add,
           color: Colors.black,
         ),
-        backgroundColor: Colors.white,
       ),
     );
   }

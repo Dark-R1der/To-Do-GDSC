@@ -3,13 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:to_do_gdsc/models/category.dart';
 
 class tiles extends StatelessWidget {
-  tiles({
-    super.key,
-    required this.title,
-    required this.category,
-    required this.date,
-    required this.onRemove
-  });
+  tiles(
+      {super.key,
+      required this.title,
+      required this.category,
+      required this.date,
+      required this.onRemove});
   String title;
   Category category;
   DateTime date;
@@ -25,41 +24,42 @@ class tiles extends StatelessWidget {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 25,
                   color: Colors.black,
                   fontWeight: FontWeight.w400),
             ),
-            SizedBox(height: 12), // Add spacing between title and subtitle
+            const SizedBox(
+                height: 12), // Add spacing between title and subtitle
             Row(
               children: [
                 SizedBox(
                   height: 30,
                   child: ElevatedButton(
                     onPressed: () {},
-                    child: Text(category.title),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    child: Text(category.title),
                   ),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 const Icon(
                   Icons.calendar_month_outlined,
                   size: 20,
                 ),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 Text(
                   DateFormat('yyyy-MM-dd').format(date),
-                  style: TextStyle(color: Colors.black),
+                  style: const TextStyle(color: Colors.black),
                 ),
               ],
             ),
@@ -67,12 +67,12 @@ class tiles extends StatelessWidget {
         ),
         trailing: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 6,
             ),
             IconButton(
-                onPressed:onRemove,
-                icon: Icon(
+                onPressed: onRemove,
+                icon: const Icon(
                   Icons.check_box_outline_blank,
                   size: 40,
                 ))
