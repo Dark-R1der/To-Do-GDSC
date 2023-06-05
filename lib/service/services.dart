@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:to_do_gdsc/data/categories.dart';
 import 'package:to_do_gdsc/models/category.dart';
 import 'package:to_do_gdsc/models/todolist.dart';
 
-class Services {
+class Services extends GetxController {
   Future<void> addTask(ToDoItem newItem) async {
     Map<String, dynamic> obj = {
       "name": newItem.title,
