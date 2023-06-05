@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -18,14 +19,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<ToDoItem> toDoList = [];
-  List<ToDoItem> toDoListPinned = [];
-
   final Services _s = Services();
 
   Future<void> _removeItem(String documentId) async {
     _s.deleteTodoItem(documentId);
-    await readTasks();
+
     SnackBar snackBar = const SnackBar(
       content: Text("Task completed successfully"),
       duration: Duration(seconds: 2),
@@ -33,31 +31,14 @@ class _HomePageState extends State<HomePage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  Future<void> readTasks() async {
-    List<ToDoItem> temp = await _s.read() as List<ToDoItem>;
-    List<ToDoItem> dupTasks = [];
-    List<ToDoItem> dupPinedTasks = [];
-    for (var element in temp) {
-      if (element.ispined) {
-        dupPinedTasks.add(element);
-      }
-      dupTasks.add(element);
-    }
-    setState(() {
-      toDoList = dupTasks;
-      toDoListPinned = dupPinedTasks;
-    });
-  }
-
   @override
   void initState() {
-    readTasks();
-
+    _s.read();
     super.initState();
   }
 
   void _removeItemPinned(int index) {
-    _s.read();
+    //_s.deleteTodoItem();
   }
 
   Future<dynamic> showDia() {
@@ -209,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                     id: textTitle + DateTime.parse(dateinput.text).toString(),
                     ispined: isPined);
                 _s.addTask(newItem);
-                readTasks();
+                //_s.read();
                 Navigator.of(context).pop();
               },
               child: const Text('Submit'),
@@ -278,114 +259,116 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(120.0),
-          child: AppBar(
-            leading: SizedBox(
-              height: 20,
-              width: 20,
-              child: Image.asset(
-                'assets/appBarLogo.png',
+      child: Obx(
+        () => Scaffold(
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(120.0),
+            child: AppBar(
+              leading: SizedBox(
+                height: 20,
+                width: 20,
+                child: Image.asset(
+                  'assets/appBarLogo.png',
+                ),
               ),
-            ),
-            title: Text(
-              'DooIt',
-              style: GoogleFonts.poppins(
-                textStyle: const TextStyle(
-                  fontSize: 25,
+              title: Text(
+                'DooIt',
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    fontSize: 25,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              elevation: 0,
+              backgroundColor: Colors.white,
+              bottom: TabBar(
+                indicatorPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+                unselectedLabelColor: Colors.grey,
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicator: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
                   color: Colors.black,
-                  fontWeight: FontWeight.bold,
                 ),
-              ),
-            ),
-            elevation: 0,
-            backgroundColor: Colors.white,
-            bottom: TabBar(
-              indicatorPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-              unselectedLabelColor: Colors.grey,
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.black,
-              ),
-              tabs: [
-                Tab(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "All List",
-                      style: GoogleFonts.poppins(
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                tabs: [
+                  Tab(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "All List",
+                        style: GoogleFonts.poppins(
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Tab(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Pinned",
-                      style: GoogleFonts.poppins(
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                  Tab(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Pinned",
+                        style: GoogleFonts.poppins(
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        body: TabBarView(
-          children: [
-            toDoList.isEmpty
-                ? showDialogBox()
-                : Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: ListView.separated(
-                      itemBuilder: (context, index) => tiles(
-                        title: toDoList[index].title,
-                        category: toDoList[index].category,
-                        date: toDoList[index].dateTime,
-                        onRemove: () => _removeItem(toDoList[index].id),
+          body: TabBarView(
+            children: [
+              _s.allTasks.isEmpty
+                  ? showDialogBox()
+                  : Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: ListView.separated(
+                        itemBuilder: (context, index) => tiles(
+                          title: _s.allTasks[index].title,
+                          category: _s.allTasks[index].category,
+                          date: _s.allTasks[index].dateTime,
+                          onRemove: () => _removeItem(_s.allTasks[index].id),
+                        ),
+                        separatorBuilder: ((context, index) => const SizedBox(
+                              height: 20,
+                            )),
+                        itemCount: _s.allTasks.length,
                       ),
-                      separatorBuilder: ((context, index) => const SizedBox(
-                            height: 20,
-                          )),
-                      itemCount: toDoList.length,
                     ),
-                  ),
-            toDoListPinned.isEmpty
-                ? showDialogBox()
-                : Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: ListView.separated(
-                      itemBuilder: (context, index) => tiles(
-                        title: toDoListPinned[index].title,
-                        category: toDoListPinned[index].category,
-                        date: toDoListPinned[index].dateTime,
-                        onRemove: () => _removeItemPinned(index),
+              _s.pinnedTasks.isEmpty
+                  ? showDialogBox()
+                  : Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: ListView.separated(
+                        itemBuilder: (context, index) => tiles(
+                          title: _s.pinnedTasks[index].title,
+                          category: _s.pinnedTasks[index].category,
+                          date: _s.pinnedTasks[index].dateTime,
+                          onRemove: () => _removeItemPinned(index),
+                        ),
+                        separatorBuilder: ((context, index) => const SizedBox(
+                              height: 20,
+                            )),
+                        itemCount: _s.pinnedTasks.length,
                       ),
-                      separatorBuilder: ((context, index) => const SizedBox(
-                            height: 20,
-                          )),
-                      itemCount: toDoListPinned.length,
                     ),
-                  ),
-          ],
+            ],
+          ),
+          floatingActionButton: _s.allTasks.isEmpty
+              ? null
+              : FloatingActionButton(
+                  onPressed: () {
+                    showDia();
+                  },
+                  child: const Icon(Icons.add),
+                ),
         ),
-        floatingActionButton: toDoList.isEmpty
-            ? null
-            : FloatingActionButton(
-                onPressed: () {
-                  showDia();
-                },
-                child: const Icon(Icons.add),
-              ),
       ),
     );
   }
