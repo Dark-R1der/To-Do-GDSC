@@ -57,9 +57,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _removeItemPinned(int index) {
-    setState(() {
-      toDoListPinned.removeAt(index);
-    });
+    _s.read();
   }
 
   Future<dynamic> showDia() {
