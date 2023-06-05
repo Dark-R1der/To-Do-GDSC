@@ -26,6 +26,11 @@ class _HomePageState extends State<HomePage> {
   Future<void> _removeItem(String documentId) async {
     _s.deleteTodoItem(documentId);
     await readTasks();
+    SnackBar snackBar = const SnackBar(
+      content: Text("Task completed successfully"),
+      duration: Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   Future<void> readTasks() async {
