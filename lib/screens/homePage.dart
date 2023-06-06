@@ -370,7 +370,7 @@ class _HomePageState extends State<HomePage> {
                         title: toDoListPinned[index].title,
                         category: toDoListPinned[index].category,
                         date: toDoListPinned[index].dateTime,
-                        onRemove: () => _removeItemPinned(index),
+                        onRemove: () => _removeItem(toDoListPinned[index].id),
                       ),
                       separatorBuilder: ((context, index) => const SizedBox(
                             height: 20,
