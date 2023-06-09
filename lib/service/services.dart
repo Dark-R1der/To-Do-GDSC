@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:to_do_gdsc/data/categories.dart';
 import 'package:to_do_gdsc/models/category.dart';
 import 'package:to_do_gdsc/models/todolist.dart';
