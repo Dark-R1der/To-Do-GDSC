@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:to_do_gdsc/data/categories.dart';
 import 'package:to_do_gdsc/models/category.dart';
 import 'package:to_do_gdsc/models/todolist.dart';
-import 'package:to_do_gdsc/service/services.dart';
 import 'package:to_do_gdsc/widgets/button.dart';
 import 'package:to_do_gdsc/widgets/pin.dart';
 import 'package:to_do_gdsc/widgets/tiles.dart';
@@ -21,11 +20,23 @@ class _HomePageState extends State<HomePage> {
   List<ToDoItem> toDoList = [];
   List<ToDoItem> toDoListPinned = [];
 
-  final Services _s = Services();
-
-  Future<void> _removeItem(String documentId) async {
-    _s.deleteTodoItem(documentId);
-    await readTasks();
+  void _removeItem(String documentId) {
+    List<ToDoItem> tempList = [];
+    List<ToDoItem> tempListPinned = [];
+    for (var items in toDoList) {
+      if (items.id != documentId) {
+        tempList.add(items);
+      }
+    }
+    for (var items in toDoListPinned) {
+      if (items.id != documentId) {
+        tempListPinned.add(items);
+      }
+    }
+    setState(() {
+      toDoList = tempList;
+      toDoListPinned = tempListPinned;
+    });
     SnackBar snackBar = const SnackBar(
       content: Text("Task completed successfully"),
       duration: Duration(seconds: 2),
@@ -33,28 +44,7 @@ class _HomePageState extends State<HomePage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  Future<void> readTasks() async {
-    List<ToDoItem> temp = await _s.read() as List<ToDoItem>;
-    List<ToDoItem> dupTasks = [];
-    List<ToDoItem> dupPinedTasks = [];
-    for (var element in temp) {
-      if (element.ispined) {
-        dupPinedTasks.add(element);
-      }
-      dupTasks.add(element);
-    }
-    setState(() {
-      toDoList = dupTasks;
-      toDoListPinned = dupPinedTasks;
-    });
-  }
-
-  @override
-  void initState() {
-    readTasks();
-
-    super.initState();
-  }
+  void _addItem(String documentId) {}
 
   Future<dynamic> showDia() {
     String textTitle = '';
@@ -195,17 +185,20 @@ class _HomePageState extends State<HomePage> {
                   if (_selectedButtonIndex == 3) {
                     _selectedCategory = categories[Categories.Other]!;
                   }
-
-                  //toDoList.add(newItem);
                 });
                 ToDoItem newItem = ToDoItem(
                     title: textTitle,
                     category: _selectedCategory,
                     dateTime: DateTime.parse(dateinput.text),
                     id: textTitle + DateTime.parse(dateinput.text).toString(),
-                    ispined: isPined);
-                _s.addTask(newItem);
-                readTasks();
+                    isPinned: isPined);
+                setState(() {
+                  toDoList.add(newItem);
+                  if (newItem.isPinned) {
+                    toDoListPinned.add(newItem);
+                  }
+                });
+
                 Navigator.of(context).pop();
               },
               child: const Text('Submit'),

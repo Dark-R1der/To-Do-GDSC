@@ -6,9 +6,9 @@ class ToDoItem {
     required this.category,
     required this.dateTime,
     required this.id,
-    required this.ispined,
+    required this.isPinned
   });
-  final bool ispined;
+  final bool isPinned;
   final String id;
   late final String title;
   final Category category;
