@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:to_do_gdsc/data/categories.dart';
 import 'package:to_do_gdsc/models/category.dart';
 import 'package:to_do_gdsc/models/todolist.dart';
 
 class Services {
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
   Future<void> addTask(ToDoItem newItem) async {
     Map<String, dynamic> obj = {
       "name": newItem.title,
@@ -13,16 +15,15 @@ class Services {
       "ispined": newItem.ispined
     };
     String docId = newItem.id;
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
     final DocumentReference tasksRef = firestore.collection("tasks").doc(docId);
     await tasksRef.set(obj);
   }
 
   Future<List> read() async {
     List<ToDoItem> tasks = [];
-    final snapshot = await FirebaseFirestore.instance.collection("tasks").get();
+    final snapshot = await firestore.collection("tasks").get();
     final List<DocumentSnapshot> documents = snapshot.docs;
-    for (var element in documents) {
+    for (DocumentSnapshot element in documents) {
       dynamic category = element["category"];
       if (category == "Personal") {
         category = Categories.Personal;
@@ -45,7 +46,6 @@ class Services {
   }
 
   Future<void> deleteTodoItem(String documentId) async {
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
     final DocumentReference documentReference =
         firestore.collection('tasks').doc(documentId);
     await documentReference.delete();

@@ -56,12 +56,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  void _removeItemPinned(int index) {
-    setState(() {
-      toDoListPinned.removeAt(index);
-    });
-  }
-
   Future<dynamic> showDia() {
     String textTitle = '';
     TextEditingController dateinput = TextEditingController();
