@@ -23,12 +23,12 @@ class Services {
     final snapshot = await firestore.collection("tasks").get();
     final List<DocumentSnapshot> documents = snapshot.docs;
     for (DocumentSnapshot element in documents) {
-      dynamic category = element["category"];
-      if (category == "Personal") {
+      Categories category;
+      if (element["category"] == "Personal") {
         category = Categories.Personal;
-      } else if (category == "Finance") {
+      } else if (element["category"] == "Finance") {
         category = Categories.Finance;
-      } else if (category == "Work") {
+      } else if (element["category"] == "Work") {
         category = Categories.Work;
       } else {
         category = Categories.Other;

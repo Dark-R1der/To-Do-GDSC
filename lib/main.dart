@@ -1,11 +1,22 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_gdsc/screens/homePage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyA3BTrYPj2Iu5qVAbdmwVOO8iW0QQ56WwA",
+            appId: "1:1041633804111:web:c38618088837439dd34f3a",
+            messagingSenderId: "1041633804111",
+            projectId: "gdsc-19638"));
+  } else {
+    Firebase.initializeApp();
+  }
+
   runApp(const MyApp());
 }
 
